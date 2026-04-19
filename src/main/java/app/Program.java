@@ -6,7 +6,7 @@ import views.ListarVehiculosView;
 
 public class Program {
     public static void main(String[] args) throws IllegalArgumentException, InvalidPropertiesFormatException {
-        Persistencia.inicializar();
+        Persistencia.inicializarDatos();
         ListarVehiculosView view = new ListarVehiculosView();
         view.setVisible(true);
     }

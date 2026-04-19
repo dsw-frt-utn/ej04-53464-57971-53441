@@ -31,4 +31,14 @@ public class Controlador {
         }
         return new double[] {consumoElectricos, consumoCombustible};
     }
+
+    // --- ESTE ES EL MÉTODO QUE FALTABA ---
+    public static void agregarVehiculo(Vehiculo v) {
+        Persistencia.agregarVehiculo(v);
+    }
+    
+    // Si necesitás el método de sucursales para el ComboBox, agregalo también:
+    public static ArrayList<domain.Sucursal> getSucursales() {
+        return Persistencia.getSucursales();
+    }
 }

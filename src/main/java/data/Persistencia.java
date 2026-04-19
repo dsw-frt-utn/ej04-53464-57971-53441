@@ -1,58 +1,61 @@
 package data;
 
-import domain.*;
+import domain.Marca;
+import domain.Sucursal;
+import domain.Vehiculo;
+import domain.VehiculoCombustible;
+import domain.VehiculoElectrico;
 import java.util.ArrayList;
 import java.util.Optional;
 
 public class Persistencia {
+
+    // Estas son nuestras "tablas" de la base de datos en memoria
     private static ArrayList<Vehiculo> vehiculos = new ArrayList<>();
-    private static ArrayList<Responsable> responsables = new ArrayList<>();
     private static ArrayList<Sucursal> sucursales = new ArrayList<>();
-    
-    private static void inicializarResponsables(){
-        Responsable r1 = new Responsable("Carlos Gómez", "25444111", "3815551111");
-        Responsable r2 = new Responsable("Laura Pérez", "30111222", "3815552222");
-        responsables.add(r1);
-        responsables.add(r2);
+
+    // Esto se ejecuta apenas arranca el programa
+    static {
+        inicializarDatos();
     }
-    
-    private static void inicializarSucursales(){
-        Sucursal s1 = new Sucursal("SUC01", "Av. Belgrano 1200", "Tucumán", responsables.get(0));
-        Sucursal s2 = new Sucursal("SUC02", "San Martín 450", "Yerba Buena", responsables.get(1));
+
+    public static void inicializarDatos() {
+        // 1. Creamos un responsable (porque la clase Sucursal lo exige)
+        domain.Responsable resp = new domain.Responsable("Juan Perez", "20-12345678-9", "3814556677");
+
+        // 2. Creamos las sucursales (necesarias para poder asignar una al cargar un vehículo)
+        Sucursal s1 = new Sucursal("Sucursal Centro", "San Martín 123", "San Miguel de Tucumán", resp);
+        Sucursal s2 = new Sucursal("Sucursal Norte", "Av. Avellaneda 450", "San Miguel de Tucumán", resp);
         
         sucursales.add(s1);
         sucursales.add(s2);
-    }
-    
-    private static void inicializarVehiculos(){
-        Sucursal s1 = sucursales.get(0);
-        Sucursal s2 = sucursales.get(1);
-        
-       VehiculoElectrico v1 = new VehiculoElectrico("AE123FG", new Marca("Renault", "Francia"), "Kangoo E-Tech", 2020, 1000, s1, 16);
-       VehiculoElectrico v2 = new VehiculoElectrico("AF456HI", new Marca("Ford","Estados Unidos"), "E-Transit", 2021, 1300, s2, 16);
 
-       VehiculoCombustible v3 = new VehiculoCombustible("AC789JK", new Marca("Iveco","Italia"), "Daily", 2023, 1200, s1, 8, 1.5);
-       VehiculoCombustible v4 = new VehiculoCombustible("AD321LM", new Marca("Mercedes","Alemania"), "Sprinter", 2020, 1200, s2, 7, 1);
+        // 3. Dejamos las marcas creadas (opcional, para que el sistema tenga base de datos inicial)
+        Marca renault = new Marca("Renault", "Francia");
+        Marca ford = new Marca("Ford", "EEUU");
         
-        vehiculos.add(v1);
-        vehiculos.add(v2);
-        vehiculos.add(v3);
-        vehiculos.add(v4);
+        // El punto 3.a pide eliminar los vehículos creados por código.
+        // La lista 'vehiculos' queda vacía para ser llenada solo desde la ventana 'Agregar'.
     }
-    
-    public static ArrayList<Vehiculo> getVehiculos(){
+
+    // Métodos para que el Controlador pueda sacar los datos
+    public static ArrayList<Vehiculo> getVehiculos() {
         return vehiculos;
     }
-    
-    public static Optional<Vehiculo> getVehiculo(String patente){
-        return vehiculos.stream()
-                .filter(v -> v.getPatente().equals(patente))
-                .findFirst();
+
+    public static ArrayList<Sucursal> getSucursales() {
+        return sucursales;
     }
-    
-    public static void inicializar(){
-        inicializarResponsables();
-        inicializarSucursales();
-        inicializarVehiculos();
+
+    // El método que usa tu ventana "Agregar" para guardar
+    public static void agregarVehiculo(Vehiculo v) {
+        vehiculos.add(v);
+    }
+
+    // Este lo usa el controlador para buscar por patente al calcular consumos
+    public static Optional<Vehiculo> getVehiculo(String patente) {
+        return vehiculos.stream()
+                .filter(v -> v.getPatente().equalsIgnoreCase(patente))
+                .findFirst();
     }
 }
