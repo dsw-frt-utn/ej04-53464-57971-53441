@@ -8,7 +8,9 @@ domain\VehiculoElectrico.class
 views\Controlador.class
 app\Program.class
 views\VehiculoViewModel.class
+views\AgregarVehiculosView.class
 views\ListarVehiculosView.class
 domain\Sucursal.class
 views\ListarVehiculosView$2.class
+views\MenuView.class
 domain\VehiculoTipo.class
